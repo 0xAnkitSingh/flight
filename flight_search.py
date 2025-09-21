@@ -101,16 +101,20 @@ def _format_flight_data(raw_results: Dict[str, Any]) -> List[Dict[str, str]]:
         List of formatted flight dictionaries
     """
     best_flights = raw_results.get("best_flights", [])
+    other_flights = raw_results.get("other_flights", [])
     
-    if not best_flights:
+    # Combine both best_flights and other_flights for more results
+    all_flights = best_flights + other_flights
+    
+    if not all_flights:
         print("No flights found in search results")
         return []
     
-    print(f"Processing {len(best_flights)} flights...")
+    print(f"Processing {len(all_flights)} flights ({len(best_flights)} best + {len(other_flights)} other)...")
     
     formatted_flights = []
     
-    for flight in best_flights:
+    for flight in all_flights:
         # Skip flights without flight segments
         if not flight.get("flights") or len(flight["flights"]) == 0:
             continue
